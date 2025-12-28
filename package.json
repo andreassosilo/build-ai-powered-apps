@@ -1,13 +1,6 @@
 {
   "name": "build-ai-powered-apps",
   "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "bun run index.ts",
-    "format": "prettier --write .",
-    "prepare": "husky"
-  },
   "devDependencies": {
     "@types/bun": "latest",
     "concurrently": "^9.2.1",
@@ -18,10 +11,14 @@
   "peerDependencies": {
     "typescript": "^5"
   },
+  "private": true,
+  "scripts": {
+    "dev": "bun run index.ts",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
+  "type": "module",
   "workspaces": [
     "packages/*"
-  ],
-  "dependencies": {
-    "zod": "^4.2.1"
-  }
+  ]
 }
