@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useForm } from 'react-hook-form';
 import { FaArrowUp } from 'react-icons/fa';
@@ -21,8 +21,13 @@ type Message = {
 const ChatBot = () => {
    const [messages, setMessages] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
+   const formRef = useRef<HTMLFormElement | null>(null);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
+
+   useEffect(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+   }, [messages]);
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessages((prev) => [...prev, { content: prompt, role: 'user' }]);
@@ -64,14 +69,15 @@ const ChatBot = () => {
             {isBotTyping && (
                <div className="flex self-start gap-1 px-3 py-3 bg-gray-200 rounded-xl">
                   <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay: 0.2s]"></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay: 0.4s]"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.2s]"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.4s]"></div>
                </div>
             )}
          </div>
          <form
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={onKeyDown}
+            ref={formRef}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
          >
             <textarea
