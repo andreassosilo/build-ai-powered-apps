@@ -1,20 +1,15 @@
-import { type Review } from '../generated/prisma/client';
 import { reviewRepository } from '../repositories/review.repository';
 import template from '../llm/prompts/summarize-reviews.txt';
 import { llmClient } from '../llm/client';
 
 // Public interface
 export const reviewService = {
-   async getReviews(productId: number): Promise<Review[]> {
-      return reviewRepository.getReviews(productId);
-   },
-
    async summarizeReviews(productId: number): Promise<string> {
       // Check if there's already an existing summary
       const existingSummary =
          await reviewRepository.getReviewSummary(productId);
-      if (existingSummary && existingSummary.expiresAt > new Date()) {
-         return existingSummary.content;
+      if (existingSummary) {
+         return existingSummary;
       }
 
       // Get the last 10 reviews
