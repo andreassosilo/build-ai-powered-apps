@@ -16,18 +16,22 @@ export const reviewService = {
       const reviews = await reviewRepository.getReviews(productId, 10);
       const joinedReviews = reviews.map((r) => r.content).join('\n\n');
 
-      // Send the reviews to a LLM
-      const prompt = template.replace(`{{reviews}}`, joinedReviews);
+      // For option 1: Send the reviews to a LLM
+      // const prompt = template.replace(`{{reviews}}`, joinedReviews);
 
-      const response = await llmClient.generateText({
-         model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
-         prompt,
-         temperature: 0.2,
-         maxTokens: 500,
-      });
+      // Option 1: Generate text using OpenAI
+      // const response = await llmClient.generateText({
+      //    model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+      //    prompt,
+      //    temperature: 0.2,
+      //    maxTokens: 500,
+      // });
+      // const summary = response.text;
+
+      // For option 2 & 3: Summarize using HuggingFace Inference
+      const summary = await llmClient.summarizeReviews(joinedReviews);
 
       // Store in database
-      const summary = response.text;
       await reviewRepository.storeReviewSummary(productId, summary);
 
       return summary;
