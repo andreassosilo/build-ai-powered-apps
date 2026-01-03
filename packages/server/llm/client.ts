@@ -8,7 +8,7 @@ const openAIClient = new OpenAI({
 });
 
 // 2nd option: using HuggingFace Inference
-const inferenceClient = new InferenceClient(process.env.HF_TOKEN);
+const inferenceClient = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
 
 // 3rd option: using Ollama local server
 const ollamaClient = new Ollama();
